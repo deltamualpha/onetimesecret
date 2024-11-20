@@ -9,9 +9,9 @@ export function useBrandingForm(domainId: string) {
     activeTab: 'design',
     previewMode: 'desktop'
   });
-  
+
   const errors = ref<BrandingValidationErrors>({});
-  
+
   // Extract form handling logic from AccountDomainBrand
   // Add validation, submission, etc.
 
