@@ -54,7 +54,7 @@ export default [
       ],
       // Add this rule configuration
       'vue/component-tags-order': ['error', {
-        order: ['script', 'template', 'style']
+        order: ['template', 'script', 'style']
       }]
     },
     settings: {

@@ -1,4 +1,6 @@
 
+
+
 import DefaultFooter from '@/components/layout/DefaultFooter.vue';
 import DefaultHeader from '@/components/layout/DefaultHeader.vue';
 import { AsyncDataResult, CustomDomainApiResponse } from '@/types/api/responses';
@@ -65,7 +67,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/account/domains/:domain/brand',
     name: 'AccountDomainBrand',
     components: {
-      default: () => import('@/views/account/AccountDomainBrand.vue'),
+      default: () => import('@/features/branding/views/BrandingManager.vue'),
       header: DefaultHeader,
       footer: DefaultFooter,
     },
