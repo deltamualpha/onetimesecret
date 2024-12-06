@@ -1,17 +1,12 @@
 <template>
   <BaseSecretDisplay
     default-title="You have a message"
-    :instructions="domainBranding?.instructions_pre_reveal">
+    :instructions="brandingSettings?.instructions_pre_reveal">
     <template #logo>
       <!-- Brand Icon -->
       <div class="relative mx-auto sm:mx-0">
         <div
-          :class="{
-            'rounded-lg': domainBranding?.corner_style === 'rounded',
-            'rounded-full': domainBranding?.corner_style === 'pill',
-            'rounded-none': domainBranding?.corner_style === 'square'
-          }"
-          class="flex size-14 items-center justify-center bg-gray-100 dark:bg-gray-700 sm:size-16">
+          :class="[cornerStyleClasses, 'flex size-14 items-center justify-center bg-gray-100 dark:bg-gray-700 sm:size-16']">
           <!-- Default lock icon -->
           <svg
             v-if="!logoImage || hasImageError"
@@ -33,11 +28,7 @@
             :src="logoImage"
             alt="Brand logo"
             class="size-16 object-contain"
-            :class="{
-              'rounded-lg': domainBranding?.corner_style === 'rounded',
-              'rounded-full': domainBranding?.corner_style === 'pill',
-              'rounded-none': domainBranding?.corner_style === 'square'
-            }"
+            :class="cornerStyleClasses"
             @error="handleImageError"
           />
         </div>
@@ -93,15 +84,13 @@
   </BaseSecretDisplay>
 </template>
 
-<style></style>
-
 <script setup lang="ts">
 import { useClipboard } from '@/composables/useClipboard';
-import { useDomainBranding } from '@/composables/useDomainBranding';
-import { SecretData, SecretDetails } from '@/schemas/models';
+import type { SecretData, SecretDetails } from '@/schemas/models';
 import { ref } from 'vue';
 
 import BaseSecretDisplay from './BaseSecretDisplay.vue';
+import { useBranding } from '../composables/useBranding';
 
 interface Props {
   secretKey: string;
@@ -112,7 +101,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const domainBranding = useDomainBranding();
+const { brandingSettings, cornerStyleClasses } = useBranding(props.domainId);
 
 const hasImageError = ref(false);
 const { isCopied, copyToClipboard } = useClipboard();
@@ -124,9 +113,11 @@ const copySecretContent = () => {
 
   copyToClipboard(props.record?.secret_value);
 };
+
 const handleImageError = () => {
   hasImageError.value = true;
 };
+
 // Prepare the standardized path to the logo image.
 // Note that the file extension needs to be present but is otherwise not used.
 const logoImage = ref<string>(`/imagine/${props.domainId}/logo.png`);
